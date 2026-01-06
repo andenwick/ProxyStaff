@@ -1,6 +1,15 @@
 {
   "tools": [
     {
+      "name": "debug_env",
+      "description": "Debug tool to check environment variables. Shows TENANT_FOLDER, .env file status, and which credentials are configured.",
+      "script": "debug_env.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
       "name": "random_number",
       "description": "Generate a truly random number between min and max (inclusive). Use this when asked for random numbers.",
       "script": "random_number.py",
