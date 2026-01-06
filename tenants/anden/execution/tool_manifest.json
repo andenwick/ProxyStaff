@@ -1,0 +1,1124 @@
+{
+  "tools": [
+    {
+      "name": "random_number",
+      "description": "Generate a truly random number between min and max (inclusive). Use this when asked for random numbers.",
+      "script": "random_number.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "min": {
+            "type": "number",
+            "description": "Minimum value (default: 1)"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value (default: 10)"
+          }
+        }
+      }
+    },
+    {
+      "name": "echo_test",
+      "description": "Echo back a message with a timestamp. Use this to test if tools are working.",
+      "script": "echo_test.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to echo back"
+          }
+        },
+        "required": ["message"]
+      }
+    },
+    {
+      "name": "send_email",
+      "description": "Send an email via SendGrid. Use this when the user wants to send an email notification to someone.",
+      "script": "send_email.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient email address"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content (plain text)"
+          }
+        },
+        "required": ["to", "subject", "body"]
+      }
+    },
+    {
+      "name": "gmail_search",
+      "description": "Search Gmail inbox using Gmail search syntax. Returns list of matching emails with ID, subject, from, and date.",
+      "script": "gmail_search.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Gmail search query (e.g., 'from:john@example.com', 'subject:invoice', 'is:unread', 'newer_than:7d')"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Maximum number of emails to return (default: 10)"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "gmail_read",
+      "description": "Read the full content of a specific email by its ID (obtained from gmail_search).",
+      "script": "gmail_read.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "email_id": {
+            "type": "string",
+            "description": "The email ID from gmail_search results"
+          }
+        },
+        "required": ["email_id"]
+      }
+    },
+    {
+      "name": "gmail_send",
+      "description": "Send an email via Gmail SMTP.",
+      "script": "gmail_send.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient email address"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content (plain text)"
+          }
+        },
+        "required": ["to", "subject", "body"]
+      }
+    },
+    {
+      "name": "drive_search",
+      "description": "Search Google Drive files by query or text and return matching file metadata.",
+      "script": "drive_search.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Drive query string (e.g., \"name contains 'listing' and mimeType = 'application/vnd.google-apps.document'\")"
+          },
+          "text": {
+            "type": "string",
+            "description": "Plain text to search in file name or content"
+          },
+          "folder_id": {
+            "type": "string",
+            "description": "Optional folder ID to scope the search"
+          },
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 10, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_search call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed files (default: false)"
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Sort order (default: modifiedTime desc)"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_read_text",
+      "description": "Read text content from a Google Drive file (Google Docs export or text files).",
+      "script": "drive_read_text.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to read"
+          },
+          "max_bytes": {
+            "type": "number",
+            "description": "Max bytes of text to return (default: 50000)"
+          },
+          "export_mime": {
+            "type": "string",
+            "description": "Override export MIME type for Google Docs (e.g., text/plain, text/csv)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_list_recent",
+      "description": "List recently modified Google Drive files.",
+      "script": "drive_list_recent.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 10, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_list_recent call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed files (default: false)"
+          },
+          "folder_id": {
+            "type": "string",
+            "description": "Optional folder ID to scope the list"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_list_folders",
+      "description": "List Google Drive folders (optionally within a parent).",
+      "script": "drive_list_folders.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "description": "Parent folder ID to list children from"
+          },
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 25, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_list_folders call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed folders (default: false)"
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Sort order (default: name)"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_upload",
+      "description": "Upload a local file to Google Drive.",
+      "script": "drive_upload.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Local file path to upload"
+          },
+          "name": {
+            "type": "string",
+            "description": "Override file name in Drive"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID"
+          },
+          "mime_type": {
+            "type": "string",
+            "description": "Content type for the uploaded file"
+          },
+          "drive_mime_type": {
+            "type": "string",
+            "description": "Drive metadata mimeType (optional)"
+          }
+        },
+        "required": ["file_path"]
+      }
+    },
+    {
+      "name": "drive_create_doc",
+      "description": "Create a Google Doc (optionally with text content).",
+      "script": "drive_create_doc.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Document title"
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional text content to import into the doc"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID"
+          }
+        },
+        "required": ["title"]
+      }
+    },
+    {
+      "name": "drive_move_rename",
+      "description": "Move and/or rename a Drive file.",
+      "script": "drive_move_rename.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to update"
+          },
+          "new_name": {
+            "type": "string",
+            "description": "New name for the file"
+          },
+          "new_parent_id": {
+            "type": "string",
+            "description": "Move file into this folder ID"
+          },
+          "keep_existing_parents": {
+            "type": "boolean",
+            "description": "Keep existing parents when moving (default: false)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_share_link",
+      "description": "Create a shareable link for a file by setting link permissions.",
+      "script": "drive_share_link.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to share"
+          },
+          "role": {
+            "type": "string",
+            "description": "Permission role: reader, commenter, or writer (default: reader)"
+          },
+          "allow_discovery": {
+            "type": "boolean",
+            "description": "Allow file discovery without link (default: false)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_export_pdf",
+      "description": "Export a file to PDF and save it back to Drive.",
+      "script": "drive_export_pdf.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to export"
+          },
+          "output_name": {
+            "type": "string",
+            "description": "Name for the exported PDF file"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID for the PDF"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_delete",
+      "description": "Delete a file from Drive.",
+      "script": "drive_delete.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to delete"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_move_to_folder_by_name",
+      "description": "Move a file into a folder resolved by name.",
+      "script": "drive_move_to_folder_by_name.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to move"
+          },
+          "folder_name": {
+            "type": "string",
+            "description": "Folder name to move into"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Optional parent folder ID to scope the search"
+          },
+          "create_if_missing": {
+            "type": "boolean",
+            "description": "Create folder if not found (default: false)"
+          },
+          "keep_existing_parents": {
+            "type": "boolean",
+            "description": "Keep existing parents when moving (default: false)"
+          }
+        },
+        "required": ["file_id", "folder_name"]
+      }
+    },
+    {
+      "name": "docs_format",
+      "description": "Apply formatting, headings, alignment, bullets, insert, and replace operations in a Google Doc.",
+      "script": "docs_format.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "description": "Google Doc ID to update"
+          },
+          "operations": {
+            "type": "array",
+            "description": "List of formatting operations to apply",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Operation type: replace_text, insert_text, style_text, paragraph_style, bullets"
+                },
+                "find": { "type": "string" },
+                "replace": { "type": "string" },
+                "match_case": { "type": "boolean" },
+                "text": { "type": "string" },
+                "index": { "type": "number" },
+                "at_end": { "type": "boolean" },
+                "position": { "type": "string", "description": "before or after (for insert_text with match)" },
+                "match": { "type": "string" },
+                "match_all": { "type": "boolean" },
+                "target": { "type": "string", "description": "document (to apply across entire doc)" },
+                "range": {
+                  "type": "object",
+                  "properties": {
+                    "start_index": { "type": "number" },
+                    "end_index": { "type": "number" }
+                  }
+                },
+                "bold": { "type": "boolean" },
+                "italic": { "type": "boolean" },
+                "underline": { "type": "boolean" },
+                "font_family": { "type": "string" },
+                "font_size_pt": { "type": "number" },
+                "color_rgb": {
+                  "type": "array",
+                  "items": { "type": "number" },
+                  "description": "RGB array [r,g,b]"
+                },
+                "background_color_rgb": {
+                  "type": "array",
+                  "items": { "type": "number" },
+                  "description": "RGB array [r,g,b]"
+                },
+                "named_style_type": {
+                  "type": "string",
+                  "description": "HEADING_1, HEADING_2, NORMAL_TEXT, etc."
+                },
+                "alignment": {
+                  "type": "string",
+                  "description": "START, CENTER, END, JUSTIFIED"
+                },
+                "line_spacing": { "type": "number" },
+                "preset": {
+                  "type": "string",
+                  "description": "Bullet preset (e.g., BULLET_DISC_CIRCLE_SQUARE, NUMBERED_DECIMAL_NESTED)"
+                }
+              },
+              "required": ["type"]
+            }
+          }
+        },
+        "required": ["doc_id", "operations"]
+      }
+    },
+    {
+      "name": "coinbase_get_balance",
+      "description": "Check your Coinbase wallet balance. Use this before sending crypto to verify you have sufficient funds.",
+      "script": "coinbase_get_balance.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "Specific currency to check (e.g., USDT, BTC). If omitted, returns all balances."
+          }
+        }
+      }
+    },
+    {
+      "name": "coinbase_send_crypto",
+      "description": "Send crypto from Coinbase to an external wallet address. ALWAYS verify the address before sending. Use this for refilling Rainbet or other platforms.",
+      "script": "coinbase_send_crypto.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to_address": {
+            "type": "string",
+            "description": "Destination wallet address"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount to send"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency to send (default: USDT)"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network to use: TRC20, ERC20, or BEP20 (default: TRC20)"
+          }
+        },
+        "required": ["to_address", "amount"]
+      }
+    },
+    {
+      "name": "save_deposit_address",
+      "description": "Save a crypto deposit address for a platform (e.g., Rainbet) for future use.",
+      "script": "save_deposit_address.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Platform name (e.g., rainbet)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Deposit address"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network: TRC20, ERC20, or BEP20 (default: TRC20)"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency (default: USDT)"
+          }
+        },
+        "required": ["platform", "address"]
+      }
+    },
+    {
+      "name": "get_deposit_address",
+      "description": "Get a saved crypto deposit address for a platform. Use this to check if an address is already saved before asking the user.",
+      "script": "get_deposit_address.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Platform name (e.g., rainbet). If omitted, returns all saved addresses."
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_open",
+      "description": "Open a browser and navigate to a URL. Returns a session_id that MUST be used for all subsequent browser operations. Use this to access websites for automation tasks.",
+      "script": "browser_open.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL to navigate to (e.g., 'https://imyfone.com/login')"
+          },
+          "session_id": {
+            "type": "string",
+            "description": "Optional: reuse an existing session ID"
+          },
+          "persistent": {
+            "type": "boolean",
+            "description": "Keep session alive longer (default: false)"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "browser_login",
+      "description": "Fill a login form using stored credentials. Credentials are stored as {service}_email and {service}_password (e.g., 'imyfone_email'). Use browser_open first to navigate to the login page.",
+      "script": "browser_login.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "service": {
+            "type": "string",
+            "description": "Service name for credential lookup (e.g., 'imyfone' will use imyfone_email and imyfone_password)"
+          },
+          "email_selector": {
+            "type": "string",
+            "description": "CSS selector for email/username input (optional, auto-detected)"
+          },
+          "password_selector": {
+            "type": "string",
+            "description": "CSS selector for password input (optional, auto-detected)"
+          },
+          "submit_selector": {
+            "type": "string",
+            "description": "CSS selector for submit button (optional - will click if provided)"
+          }
+        },
+        "required": ["session_id", "service"]
+      }
+    },
+    {
+      "name": "browser_click",
+      "description": "Click an element on the page. Use CSS selectors to identify the element.",
+      "script": "browser_click.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector for element to click (e.g., 'button.cancel-subscription', '#submit-btn')"
+          }
+        },
+        "required": ["session_id", "selector"]
+      }
+    },
+    {
+      "name": "browser_type",
+      "description": "Type text into an input element.",
+      "script": "browser_type.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "selector": {
+            "type": "string",
+            "description": "CSS selector for input element"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text to type"
+          },
+          "clear": {
+            "type": "boolean",
+            "description": "Clear field before typing (default: true)"
+          }
+        },
+        "required": ["session_id", "selector", "text"]
+      }
+    },
+    {
+      "name": "browser_read",
+      "description": "Read the text content of the page or a specific element. Use this to see what's on the page.",
+      "script": "browser_read.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "selector": {
+            "type": "string",
+            "description": "Optional: CSS selector to read specific element (default: entire page)"
+          },
+          "max_length": {
+            "type": "number",
+            "description": "Max characters to return (default: 50000)"
+          }
+        },
+        "required": ["session_id"]
+      }
+    },
+    {
+      "name": "browser_screenshot",
+      "description": "Take a screenshot of the current page. Useful for debugging or verification.",
+      "script": "browser_screenshot.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "filename": {
+            "type": "string",
+            "description": "Optional: custom filename for the screenshot"
+          }
+        },
+        "required": ["session_id"]
+      }
+    },
+    {
+      "name": "browser_wait",
+      "description": "Wait for an element to appear or page to load. Use before interacting with dynamic content.",
+      "script": "browser_wait.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          },
+          "selector": {
+            "type": "string",
+            "description": "Optional: CSS selector to wait for"
+          },
+          "state": {
+            "type": "string",
+            "description": "Wait for state: 'visible', 'hidden', 'attached', 'detached' (default: visible)"
+          },
+          "timeout": {
+            "type": "number",
+            "description": "Timeout in milliseconds (default: 30000)"
+          }
+        },
+        "required": ["session_id"]
+      }
+    },
+    {
+      "name": "browser_close",
+      "description": "Close a browser session when done. Frees up resources.",
+      "script": "browser_close.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "description": "The session_id from browser_open"
+          }
+        },
+        "required": ["session_id"]
+      }
+    },
+    {
+      "name": "browser_list",
+      "description": "List all active browser sessions.",
+      "script": "browser_list.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "scrape_marketplace",
+      "description": "Scrape listings from local marketplaces (Facebook, Craigslist, OfferUp). Use this to find deals.",
+      "script": "scrape_marketplace.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Marketplace: 'facebook', 'craigslist', or 'offerup'"
+          },
+          "location": {
+            "type": "string",
+            "description": "City/area name (e.g., 'Denver')"
+          },
+          "radius_miles": {
+            "type": "number",
+            "description": "Search radius in miles (default: 50)"
+          },
+          "search_terms": {
+            "type": "string",
+            "description": "Optional search keywords"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Max listings to return (default: 20)"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_sold_comps",
+      "description": "Get eBay sold listings for price comparison. Use this to estimate resale value.",
+      "script": "get_sold_comps.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "description": "Search keywords (e.g., 'iPhone 12 Pro 128GB')"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Item condition: 'new', 'used', 'refurbished', or 'any'"
+          },
+          "days_back": {
+            "type": "number",
+            "description": "How many days to look back (default: 30)"
+          }
+        },
+        "required": ["keywords"]
+      }
+    },
+    {
+      "name": "calculate_arbitrage",
+      "description": "Calculate profit margin for a deal. Use this to evaluate if a deal meets the 50% threshold.",
+      "script": "calculate_arbitrage.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "buy_price": {
+            "type": "number",
+            "description": "Purchase price"
+          },
+          "estimated_sell": {
+            "type": "number",
+            "description": "Expected sell price"
+          },
+          "platform": {
+            "type": "string",
+            "description": "Selling platform: 'ebay', 'facebook', 'poshmark', 'local' (for fee calculation)"
+          },
+          "shipping_cost": {
+            "type": "number",
+            "description": "Estimated shipping cost (default: 0)"
+          },
+          "other_costs": {
+            "type": "number",
+            "description": "Any other costs like packaging (default: 0)"
+          }
+        },
+        "required": ["buy_price", "estimated_sell"]
+      }
+    },
+    {
+      "name": "save_deal",
+      "description": "Save a deal to the deals database. Use this after finding a profitable deal.",
+      "script": "save_deal.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Item title"
+          },
+          "source": {
+            "type": "string",
+            "description": "Source platform: 'facebook', 'craigslist', 'offerup', 'bstock'"
+          },
+          "url": {
+            "type": "string",
+            "description": "Listing URL"
+          },
+          "buy_price": {
+            "type": "number",
+            "description": "Purchase price"
+          },
+          "estimated_sell": {
+            "type": "number",
+            "description": "Expected sell price"
+          },
+          "margin_pct": {
+            "type": "number",
+            "description": "Profit margin percentage"
+          },
+          "images": {
+            "type": "array",
+            "description": "Array of image URLs"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes"
+          }
+        },
+        "required": ["title", "source", "buy_price", "estimated_sell", "margin_pct"]
+      }
+    },
+    {
+      "name": "analyze_buyer_demand",
+      "description": "Analyze market demand for an item. Returns demand score, average days to sell, and buyer insights.",
+      "script": "analyze_buyer_demand.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "description": "Item keywords to analyze"
+          },
+          "category": {
+            "type": "string",
+            "description": "Optional category filter"
+          }
+        },
+        "required": ["keywords"]
+      }
+    },
+    {
+      "name": "notify_buyer_network",
+      "description": "Notify matching buyers about a deal. Matches buyers by category and price range, sends email notifications.",
+      "script": "notify_buyer_network.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "description": "Item details: {title, price, url, images, margin_pct}"
+          },
+          "category": {
+            "type": "string",
+            "description": "Item category for matching (auto-detected if not provided)"
+          },
+          "notify_all": {
+            "type": "boolean",
+            "description": "Notify all matching buyers instead of top 3 (default: false)"
+          },
+          "max_notifications": {
+            "type": "number",
+            "description": "Max notifications to send (default: 3)"
+          }
+        },
+        "required": ["item"]
+      }
+    },
+    {
+      "name": "manage_buyer",
+      "description": "Add, update, remove, or list buyers in your network. Use this to manage your buyer database.",
+      "script": "manage_buyer.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Action: 'add', 'update', 'remove', or 'list'"
+          },
+          "name": {
+            "type": "string",
+            "description": "Buyer name (required for add/update/remove)"
+          },
+          "categories": {
+            "type": "array",
+            "description": "Categories they buy: electronics, furniture, collectibles, clothing, tools, appliances"
+          },
+          "price_range": {
+            "type": "object",
+            "description": "Price range: {min: 0, max: 1000}"
+          },
+          "contact_method": {
+            "type": "string",
+            "description": "Contact method: 'email', 'whatsapp', or 'sms'"
+          },
+          "contact_info": {
+            "type": "string",
+            "description": "Email address or phone number"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes about this buyer"
+          }
+        }
+      }
+    },
+    {
+      "name": "list_ebay",
+      "description": "Create an eBay listing. Opens eBay sell page and provides listing data for form completion.",
+      "script": "list_ebay.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Listing title (max 80 characters)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Item description"
+          },
+          "price": {
+            "type": "number",
+            "description": "Buy It Now price"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition: 'new', 'like_new', 'good', 'acceptable'"
+          },
+          "category": {
+            "type": "string",
+            "description": "eBay category (optional)"
+          },
+          "images": {
+            "type": "array",
+            "description": "Array of image URLs"
+          },
+          "shipping_cost": {
+            "type": "number",
+            "description": "Shipping cost (0 for free shipping)"
+          },
+          "accept_offers": {
+            "type": "boolean",
+            "description": "Enable Best Offer (default: true)"
+          },
+          "deal_id": {
+            "type": "string",
+            "description": "Associated deal ID for tracking"
+          }
+        },
+        "required": ["title", "price"]
+      }
+    },
+    {
+      "name": "list_fb_marketplace",
+      "description": "Create a Facebook Marketplace listing. Opens FB create listing page and provides listing data.",
+      "script": "list_fb_marketplace.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Listing title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Item description"
+          },
+          "price": {
+            "type": "number",
+            "description": "Asking price"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Condition: 'new', 'like_new', 'good', 'fair'"
+          },
+          "category": {
+            "type": "string",
+            "description": "FB category"
+          },
+          "location": {
+            "type": "string",
+            "description": "Pickup location (default: Denver, CO)"
+          },
+          "images": {
+            "type": "array",
+            "description": "Array of image URLs"
+          },
+          "deal_id": {
+            "type": "string",
+            "description": "Associated deal ID for tracking"
+          }
+        },
+        "required": ["title", "price"]
+      }
+    },
+    {
+      "name": "update_inventory",
+      "description": "Update deal or listing status. Use to track deals from found through sold.",
+      "script": "update_inventory.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "deal_id": {
+            "type": "string",
+            "description": "Deal ID to update"
+          },
+          "status": {
+            "type": "string",
+            "description": "New status: found, approved, rejected, purchased, listed, sold, expired"
+          },
+          "listing_ids": {
+            "type": "array",
+            "description": "Platform listing IDs (for 'listed' status)"
+          },
+          "listing_urls": {
+            "type": "array",
+            "description": "Listing URLs (for 'listed' status)"
+          },
+          "sold_price": {
+            "type": "number",
+            "description": "Actual sale price (for 'sold' status)"
+          },
+          "sold_platform": {
+            "type": "string",
+            "description": "Where it sold (for 'sold' status)"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes"
+          }
+        },
+        "required": ["deal_id"]
+      }
+    },
+    {
+      "name": "setup_deal_triggers",
+      "description": "Set up automated triggers for deal hunting. Creates scheduled scans for marketplaces and liquidation sites.",
+      "script": "setup_deal_triggers.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Action: 'setup_all' (all triggers), 'deal_scanner' (30 min scans), 'liquidation_check' (daily 8am), 'listing_expiry' (daily 6pm), 'status' (check current triggers)"
+          }
+        }
+      }
+    },
+    {
+      "name": "get_inventory_status",
+      "description": "Get a summary of deal hunting inventory. Shows deals awaiting approval, items to list, active listings, profit tracking.",
+      "script": "get_inventory_status.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "detailed": {
+            "type": "boolean",
+            "description": "Include full deal/listing details (default: false)"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "lastUpdated": "2026-01-01T04:36:53.379Z",
+  "timezone": "America/Denver",
+  "workingHours": {
+    "start": "09:00",
+    "end": "17:00",
+    "days": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "busySlots": [],
+  "nextAvailable": null
+}

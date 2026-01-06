@@ -1,0 +1,14 @@
+{
+  "deal_hunting": {
+    "margin_threshold": 50,
+    "location": "Salt Lake City",
+    "radius_miles": 50,
+    "categories": "general",
+    "platforms": ["facebook", "craigslist", "offerup"],
+    "scan_interval_minutes": 30
+  },
+  "notifications": {
+    "whatsapp_enabled": true,
+    "email_enabled": false
+  }
+}
