@@ -2,7 +2,7 @@
 """
 Search Gmail inbox using IMAP.
 
-Required environment variables:
+Required environment variables (or .env file in cwd):
 - GMAIL_ADDRESS: Your Gmail address
 - GMAIL_APP_PASSWORD: Gmail App Password (not your regular password)
 """
@@ -14,6 +14,25 @@ import imaplib
 import email
 from email.header import decode_header
 from datetime import datetime
+
+def load_env_from_cwd():
+    """Load .env file from current working directory into os.environ."""
+    env_path = os.path.join(os.getcwd(), '.env')
+    if os.path.exists(env_path):
+        with open(env_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    # Remove quotes if present
+                    value = value.strip()
+                    if (value.startswith('"') and value.endswith('"')) or \
+                       (value.startswith("'") and value.endswith("'")):
+                        value = value[1:-1]
+                    os.environ[key] = value
+
+# Load .env from cwd (tenant folder)
+load_env_from_cwd()
 
 
 def decode_mime_header(header):
