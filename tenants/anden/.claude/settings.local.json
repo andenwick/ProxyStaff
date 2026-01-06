@@ -13,10 +13,9 @@
   },
   "mcpServers": {
     "tools": {
-      "command": "npx",
+      "command": "node",
       "args": [
-        "tsx",
-        "C:\\Users\\anden\\OneDrive\\Desktop\\ProxyStaff\\src\\mcp\\toolManifestServer.ts"
+        "C:\\Users\\anden\\OneDrive\\Desktop\\ProxyStaff\\dist\\mcp\\toolManifestServer.js"
       ],
       "env": {
         "TENANT_FOLDER": "C:\\Users\\anden\\OneDrive\\Desktop\\ProxyStaff\\tenants\\anden"
