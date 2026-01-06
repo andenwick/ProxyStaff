@@ -111,9 +111,21 @@ def main():
         # Get credentials
         gmail_address = os.environ.get("GMAIL_ADDRESS")
         gmail_password = os.environ.get("GMAIL_APP_PASSWORD")
+        tenant_folder = os.environ.get("TENANT_FOLDER", "NOT_SET")
 
         if not gmail_address or not gmail_password:
-            print(json.dumps({"status": "error", "message": "GMAIL_ADDRESS or GMAIL_APP_PASSWORD not configured"}))
+            # Debug: show what env vars we have
+            env_keys = [k for k in os.environ.keys() if k.startswith(("GMAIL", "TENANT"))]
+            print(json.dumps({
+                "status": "error",
+                "message": "GMAIL_ADDRESS or GMAIL_APP_PASSWORD not configured",
+                "debug": {
+                    "TENANT_FOLDER": tenant_folder,
+                    "relevant_env_keys": env_keys,
+                    "GMAIL_ADDRESS_set": gmail_address is not None,
+                    "GMAIL_APP_PASSWORD_set": gmail_password is not None
+                }
+            }))
             sys.exit(1)
 
         # Connect to Gmail IMAP
