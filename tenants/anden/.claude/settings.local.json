@@ -16,10 +16,10 @@
       "command": "npx",
       "args": [
         "tsx",
-        "../../src/mcp/toolManifestServer.ts"
+        "C:\\Users\\anden\\OneDrive\\Desktop\\ProxyStaff\\src\\mcp\\toolManifestServer.ts"
       ],
       "env": {
-        "TENANT_FOLDER": "."
+        "TENANT_FOLDER": "C:\\Users\\anden\\OneDrive\\Desktop\\ProxyStaff\\tenants\\anden"
       }
     }
   }
