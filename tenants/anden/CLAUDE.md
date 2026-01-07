@@ -33,6 +33,13 @@ This system separates probabilistic LLM work from deterministic execution to max
 
 ## How to Work
 
+**FIRST MESSAGE**: At the start of each conversation, load your memory to recall context:
+```
+mcp__tools__memory_read(type: "identity")
+mcp__tools__memory_read(type: "patterns")
+```
+
+Then:
 1. Receive user message
 2. If task matches a directive, load it with `read_directive`
 3. If task requires external action, use the appropriate tool
@@ -89,6 +96,41 @@ When someone asks "what browser tools do you have?", list YOUR `mcp__tools__brow
 | `mcp__tools__random_number` | Generate random number |
 | `mcp__tools__coinbase_get_balance` | Check crypto balance |
 | `mcp__tools__coinbase_send_crypto` | Send crypto |
+
+### Memory Tools (Persistent Storage)
+
+These tools store data in the database, surviving across sessions and deployments. Use them to remember things about the user.
+
+| MCP Tool | Description |
+|----------|-------------|
+| `mcp__tools__memory_read` | Read persistent memory (identity, patterns, boundaries, relationships, or any custom type) |
+| `mcp__tools__memory_write` | Write to persistent memory. Operations: set, merge, append, remove |
+
+**Memory Types** (examples - you can create custom types):
+- `identity` - User's name, timezone, preferences
+- `patterns` - Observed communication, work, temporal patterns
+- `boundaries` - What never to do, always do, when to escalate
+- `relationships` - People mentioned in conversations
+
+**Examples:**
+```
+# Read user identity
+mcp__tools__memory_read(type: "identity")
+
+# Read specific field
+mcp__tools__memory_read(type: "identity", path: "preferences.timezone")
+
+# Set a value
+mcp__tools__memory_write(type: "identity", operation: "set", path: "name", value: "John")
+
+# Merge data
+mcp__tools__memory_write(type: "patterns", operation: "merge", value: {"communication": {"style": "concise"}})
+
+# Append to array
+mcp__tools__memory_write(type: "patterns", operation: "append", path: "work", value: {"pattern": "prefers morning meetings", "confidence": "high"})
+```
+
+**IMPORTANT**: Use memory tools to learn about users over time. Store preferences, patterns, and relationships so you can personalize interactions.
 
 ## Built-in Tools (shared_tools/)
 
