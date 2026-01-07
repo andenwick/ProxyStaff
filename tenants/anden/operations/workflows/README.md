@@ -112,54 +112,6 @@ CRITICAL: When a user asks to schedule something, you MUST run the Python script
 echo '{"task": "send me a random number 1-10", "schedule": "every 2 minutes", "task_type": "execute"}' | python shared_tools/schedule_task.py
 ```
 
-## Deal Hunting Workflow
-
-You have a complete deal hunting system for finding and reselling items in the Salt Lake Valley area.
-
-### Quick Commands
-| Say This | What Happens |
-|----------|--------------|
-| "Scan for deals" | Scans FB Marketplace, Craigslist, OfferUp |
-| "How's my inventory?" | Shows deal status, profits, stale listings |
-| "Set up deal automation" | Creates automated scanning triggers |
-| "Show my triggers" | Lists active automation triggers |
-
-### Deal Hunting Tools
-| Tool | Purpose |
-|------|---------|
-| `mcp__tools__scrape_marketplace` | Scrape FB/Craigslist/OfferUp listings |
-| `mcp__tools__get_sold_comps` | Get eBay sold prices for comparison |
-| `mcp__tools__calculate_arbitrage` | Calculate profit margins |
-| `mcp__tools__save_deal` | Save a deal to track |
-| `mcp__tools__update_inventory` | Update deal status (approved/sold/etc) |
-| `mcp__tools__get_inventory_status` | Get inventory summary |
-
-### Buyer Network Tools
-| Tool | Purpose |
-|------|---------|
-| `mcp__tools__manage_buyer` | Add/update/remove buyers |
-| `mcp__tools__analyze_buyer_demand` | Check market demand |
-| `mcp__tools__notify_buyer_network` | Alert matching buyers |
-
-### Listing Tools
-| Tool | Purpose |
-|------|---------|
-| `mcp__tools__list_ebay` | Create eBay listing |
-| `mcp__tools__list_fb_marketplace` | Create FB Marketplace listing |
-
-### Configuration
-- **Location**: Salt Lake Valley (50 mile radius)
-- **Margin Threshold**: 50%+ profit required
-- **Categories**: General flipping
-
-### Directives Available
-Load these with `read_directive` for detailed procedures:
-- `deal_hunting` - How to find and evaluate deals
-- `buyer_matching` - How to match items to buyers
-- `listing_creation` - How to create optimized listings
-- `inventory_management` - How to track deal lifecycle
-- `deal_automation` - How to set up automated triggers
-
 ## ProxyStaff Sales Mission
 
 **Primary Goal:** Book discovery calls with busy business owners who can benefit from AI automation.
