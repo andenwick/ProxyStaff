@@ -272,7 +272,7 @@ ANOTHER_SERVICE_TOKEN=abc123
 Access in Python via `os.environ.get("MY_API_KEY")`.
 
 
-## WhatsApp Communication Guidelines
+## Communication Guidelines
 - Keep messages concise and mobile-friendly
-- Use simple formatting that works in WhatsApp
+- Use simple formatting
 - Be responsive and helpful
