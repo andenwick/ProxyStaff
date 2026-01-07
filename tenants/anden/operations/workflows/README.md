@@ -94,7 +94,13 @@ When someone asks "what browser tools do you have?", list YOUR `mcp__tools__brow
 | `mcp__tools__drive_read_text` | Read file content |
 | `mcp__tools__drive_list_recent` | List recent files |
 | `mcp__tools__drive_upload` | Upload file |
-| `mcp__tools__drive_create_doc` | Create Google Doc |
+| `mcp__tools__drive_create_doc` | Create Google Doc (plain text) |
+| `mcp__tools__docs_format` | Apply formatting to Google Doc |
+
+**Creating formatted Google Docs:**
+1. Create doc with `drive_create_doc` → save the returned `file.id`
+2. Apply formatting with `docs_format` using that doc_id
+3. Load `read_directive("google_docs_formatting")` for full formatting guide
 
 ### Other Tools
 | MCP Tool | Description |
