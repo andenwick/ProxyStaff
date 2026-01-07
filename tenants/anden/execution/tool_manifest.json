@@ -1128,6 +1128,152 @@
           }
         }
       }
+    },
+    {
+      "name": "scrape_google_maps",
+      "description": "Search Google Maps for businesses matching a query. Use for ICP prospecting to find potential customers (real estate agents, insurance agents, etc.).",
+      "script": "scrape_google_maps.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query (e.g., 'real estate agent', 'insurance agency')"
+          },
+          "location": {
+            "type": "string",
+            "description": "City or area to search (e.g., 'Salt Lake City, UT')"
+          },
+          "radius_miles": {
+            "type": "number",
+            "description": "Search radius in miles (default: 25)"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Maximum businesses to return (default: 20)"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "research_website",
+      "description": "Research a business website to extract key information for personalized outreach. Scrapes homepage, about, and contact pages.",
+      "script": "research_website.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website URL to research (e.g., 'example.com' or 'https://example.com')"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "find_email",
+      "description": "Find the most likely email address for a person using pattern matching. Generates common email patterns based on name and domain.",
+      "script": "find_email.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Person's full name (e.g., 'John Smith')"
+          },
+          "company": {
+            "type": "string",
+            "description": "Company name (used to guess domain if not provided)"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Email domain (e.g., 'acme.com')"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "Attempt SMTP verification (default: false)"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    {
+      "name": "calendar_get_availability",
+      "description": "Get available time slots from Google Calendar for booking discovery calls. Returns open slots within business hours.",
+      "script": "calendar_get_availability.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "description": "Start date (YYYY-MM-DD, default: today)"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "End date (YYYY-MM-DD, default: 7 days from now)"
+          },
+          "slot_duration_minutes": {
+            "type": "number",
+            "description": "Duration of each slot (default: 30)"
+          },
+          "day_start_hour": {
+            "type": "number",
+            "description": "Business day start hour in 24h (default: 9)"
+          },
+          "day_end_hour": {
+            "type": "number",
+            "description": "Business day end hour in 24h (default: 17)"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone (default: America/Denver)"
+          }
+        }
+      }
+    },
+    {
+      "name": "calendar_create_event",
+      "description": "Create a Google Calendar event and optionally send an invite. Used for booking discovery calls with prospects.",
+      "script": "calendar_create_event.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Event title (e.g., 'Discovery Call - John Smith')"
+          },
+          "start_datetime": {
+            "type": "string",
+            "description": "Start time (YYYY-MM-DD HH:MM or ISO format)"
+          },
+          "duration_minutes": {
+            "type": "number",
+            "description": "Duration in minutes (default: 30)"
+          },
+          "attendee_email": {
+            "type": "string",
+            "description": "Email to send invite to"
+          },
+          "attendee_name": {
+            "type": "string",
+            "description": "Display name for attendee"
+          },
+          "description": {
+            "type": "string",
+            "description": "Event description"
+          },
+          "location": {
+            "type": "string",
+            "description": "Event location or video call link"
+          },
+          "send_invite": {
+            "type": "boolean",
+            "description": "Send calendar invite (default: true)"
+          }
+        },
+        "required": ["title", "start_datetime"]
+      }
     }
   ]
 }
