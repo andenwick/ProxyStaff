@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Scrape business listings from Google Maps Places API.
+Scrape business listings from Google Maps Places API (New).
 Used for ICP prospecting to find potential customers.
 """
 import sys
@@ -20,9 +20,10 @@ def load_env():
                     key, _, value = line.partition('=')
                     os.environ.setdefault(key.strip(), value.strip().strip('"\''))
 
-def search_places(query: str, location: str, radius_miles: int = 25, max_results: int = 20) -> list:
+
+def search_places(query: str, location: str, radius_miles: int = 25, max_results: int = 20) -> dict:
     """
-    Search Google Maps Places API for businesses.
+    Search Google Maps Places API (New) for businesses.
 
     Args:
         query: Search query (e.g., "real estate agent", "insurance agency")
@@ -31,13 +32,13 @@ def search_places(query: str, location: str, radius_miles: int = 25, max_results
         max_results: Maximum number of results to return
 
     Returns:
-        List of business dictionaries
+        Dictionary with businesses list
     """
     api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
     if not api_key:
         return {"error": "GOOGLE_MAPS_API_KEY not configured in .env"}
 
-    # Convert location to coordinates using Geocoding API
+    # Step 1: Geocode the location to get coordinates
     geocode_url = "https://maps.googleapis.com/maps/api/geocode/json"
     geocode_params = {
         "address": location,
@@ -49,68 +50,63 @@ def search_places(query: str, location: str, radius_miles: int = 25, max_results
         geo_data = geo_response.json()
 
         if geo_data.get("status") != "OK" or not geo_data.get("results"):
-            return {"error": f"Could not geocode location: {location}"}
+            return {"error": f"Could not geocode location: {location}. Status: {geo_data.get('status')}"}
 
         lat = geo_data["results"][0]["geometry"]["location"]["lat"]
         lng = geo_data["results"][0]["geometry"]["location"]["lng"]
     except Exception as e:
         return {"error": f"Geocoding failed: {str(e)}"}
 
-    # Search using Places API (Text Search)
-    places_url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
-    radius_meters = int(radius_miles * 1609.34)  # Convert miles to meters
+    # Step 2: Search using Places API (New) - Text Search
+    places_url = "https://places.googleapis.com/v1/places:searchText"
+    radius_meters = int(radius_miles * 1609.34)
 
-    places_params = {
-        "query": query,
-        "location": f"{lat},{lng}",
-        "radius": min(radius_meters, 50000),  # Max 50km
-        "key": api_key
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": api_key,
+        "X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,places.types,places.businessStatus,places.googleMapsUri"
+    }
+
+    request_body = {
+        "textQuery": query,
+        "locationBias": {
+            "circle": {
+                "center": {
+                    "latitude": lat,
+                    "longitude": lng
+                },
+                "radius": min(radius_meters, 50000.0)  # Max 50km
+            }
+        },
+        "maxResultCount": min(max_results, 20)  # API max is 20 per request
     }
 
     businesses = []
-    next_page_token = None
 
     try:
-        while len(businesses) < max_results:
-            if next_page_token:
-                places_params["pagetoken"] = next_page_token
-                # Google requires a short delay between page requests
-                import time
-                time.sleep(2)
+        response = requests.post(places_url, headers=headers, json=request_body, timeout=15)
 
-            response = requests.get(places_url, params=places_params, timeout=15)
-            data = response.json()
+        if response.status_code != 200:
+            error_data = response.json() if response.text else {}
+            error_msg = error_data.get("error", {}).get("message", response.text)
+            return {"error": f"Places API error ({response.status_code}): {error_msg}"}
 
-            if data.get("status") not in ["OK", "ZERO_RESULTS"]:
-                if data.get("status") == "ZERO_RESULTS":
-                    break
-                return {"error": f"Places API error: {data.get('status')} - {data.get('error_message', '')}"}
+        data = response.json()
 
-            for place in data.get("results", []):
-                if len(businesses) >= max_results:
-                    break
-
-                business = {
-                    "name": place.get("name"),
-                    "address": place.get("formatted_address"),
-                    "place_id": place.get("place_id"),
-                    "rating": place.get("rating"),
-                    "review_count": place.get("user_ratings_total", 0),
-                    "types": place.get("types", []),
-                    "business_status": place.get("business_status"),
-                }
-
-                # Get additional details (phone, website) if available
-                if place.get("place_id"):
-                    details = get_place_details(place["place_id"], api_key)
-                    if details:
-                        business.update(details)
-
-                businesses.append(business)
-
-            next_page_token = data.get("next_page_token")
-            if not next_page_token:
-                break
+        for place in data.get("places", []):
+            business = {
+                "name": place.get("displayName", {}).get("text"),
+                "address": place.get("formattedAddress"),
+                "place_id": place.get("id"),
+                "phone": place.get("nationalPhoneNumber"),
+                "website": place.get("websiteUri"),
+                "rating": place.get("rating"),
+                "review_count": place.get("userRatingCount", 0),
+                "types": place.get("types", []),
+                "business_status": place.get("businessStatus"),
+                "google_maps_url": place.get("googleMapsUri"),
+            }
+            businesses.append(business)
 
     except Exception as e:
         return {"error": f"Places search failed: {str(e)}"}
@@ -118,37 +114,11 @@ def search_places(query: str, location: str, radius_miles: int = 25, max_results
     return {
         "query": query,
         "location": location,
+        "coordinates": {"lat": lat, "lng": lng},
         "radius_miles": radius_miles,
         "count": len(businesses),
         "businesses": businesses
     }
-
-
-def get_place_details(place_id: str, api_key: str) -> dict:
-    """Get detailed info for a place (phone, website, hours)."""
-    details_url = "https://maps.googleapis.com/maps/api/place/details/json"
-    params = {
-        "place_id": place_id,
-        "fields": "formatted_phone_number,website,opening_hours,url",
-        "key": api_key
-    }
-
-    try:
-        response = requests.get(details_url, params=params, timeout=10)
-        data = response.json()
-
-        if data.get("status") == "OK" and data.get("result"):
-            result = data["result"]
-            return {
-                "phone": result.get("formatted_phone_number"),
-                "website": result.get("website"),
-                "google_maps_url": result.get("url"),
-                "hours": result.get("opening_hours", {}).get("weekday_text", [])
-            }
-    except:
-        pass
-
-    return {}
 
 
 def main():
