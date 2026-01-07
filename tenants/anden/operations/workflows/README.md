@@ -109,6 +109,45 @@ When someone asks "what browser tools do you have?", list YOUR `mcp__tools__brow
 | `mcp__tools__coinbase_get_balance` | Check crypto balance |
 | `mcp__tools__coinbase_send_crypto` | Send crypto |
 
+### Memory Tools (Persistent Storage)
+
+These tools store data in the database, surviving across sessions and deployments. Use them to remember things about the user.
+
+| MCP Tool | Description |
+|----------|-------------|
+| `mcp__tools__memory_read` | Read persistent memory (identity, patterns, boundaries, relationships, or any custom type) |
+| `mcp__tools__memory_write` | Write to persistent memory. Operations: set, merge, append, remove |
+
+**Memory Types** (examples - you can create custom types):
+- `identity` - User's name, timezone, preferences
+- `patterns` - Observed communication, work, temporal patterns
+- `boundaries` - What never to do, always do, when to escalate
+- `relationships` - People mentioned in conversations
+- `questions` - Questions to ask user to learn more
+
+**Examples:**
+```
+# Read user identity
+memory_read(type: "identity")
+
+# Read specific field
+memory_read(type: "identity", path: "preferences.timezone")
+
+# Set a value
+memory_write(type: "identity", operation: "set", path: "name", value: "Anden")
+
+# Merge data
+memory_write(type: "patterns", operation: "merge", value: {"communication": {"style": "concise"}})
+
+# Append to array
+memory_write(type: "patterns", operation: "append", path: "work", value: {"pattern": "prefers morning meetings", "confidence": "high"})
+
+# Remove from array (by id)
+memory_write(type: "relationships", operation: "remove", path: "people", value: {"id": "abc123"})
+```
+
+**IMPORTANT**: Use memory tools to learn about users over time. Store preferences, patterns, and relationships so you can personalize interactions.
+
 ## Built-in Tools (shared_tools/)
 
 These Python scripts are in the `shared_tools/` folder. Call them via bash with JSON input:
