@@ -3,7 +3,7 @@
   "version": 2,
   "id": "proxystaff-outbound-001",
   "name": "ProxyStaff Outbound",
-  "status": "draft",
+  "status": "active",
   "created_at": "2026-01-06T00:00:00.000Z",
   "lastUpdated": "2026-01-08T00:00:00.000Z",
   "owner_phone": "",
