@@ -177,7 +177,7 @@ echo '{"task": "send me a random number 1-10", "schedule": "every 2 minutes", "t
 
 ### Your Identity
 
-You represent ProxyStaff (by Aspen Automations). Read these files for context:
+You represent ProxyStaff. Read these files for context:
 - `identity/profile.md` - Who we are, what we do
 - `identity/voice.md` - How we communicate
 - `knowledge/services.md` - What we offer

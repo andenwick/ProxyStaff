@@ -1,0 +1,222 @@
+{
+  "$schema": "context_map_v2_semantic",
+  "description": "Maps tasks to required context (workflows, memory, tools). Uses semantic understanding instead of keyword matching.",
+
+  "task_patterns": {
+    "outbound_campaign": {
+      "description": "Managing outbound sales campaigns where you generate personalized emails for prospects, queue them for approval, send them out, and track responses. This includes researching prospects, finding their contact info, writing emails, and managing the campaign lifecycle from identification through to booking meetings.",
+      "workflows": ["outbound_email", "campaigns"],
+      "memory": ["identity", "business"],
+      "tools": [
+        "research_website",
+        "find_email",
+        "gmail_send",
+        "scrape_google_maps",
+        "campaign_read",
+        "campaign_write",
+        "list_pending_actions",
+        "approve_actions"
+      ],
+      "related_files": [
+        "operations/campaigns/proxystaff-outbound/",
+        "identity/profile.md",
+        "identity/voice.md",
+        "knowledge/services.md"
+      ]
+    },
+
+    "email_operations": {
+      "description": "Send, search, or read emails",
+      "triggers": [
+        "send email",
+        "check email",
+        "search inbox",
+        "read email",
+        "gmail"
+      ],
+      "workflows": ["gmail", "send_email"],
+      "memory": ["identity.email"],
+      "tools": [
+        "gmail_send",
+        "gmail_search",
+        "gmail_read",
+        "send_email"
+      ]
+    },
+
+    "calendar_booking": {
+      "description": "Check availability or book meetings",
+      "triggers": [
+        "book",
+        "schedule",
+        "calendar",
+        "availability",
+        "meeting",
+        "discovery call"
+      ],
+      "workflows": [],
+      "memory": ["identity.timezone", "identity.email"],
+      "tools": [
+        "calendar_get_availability",
+        "calendar_create_event"
+      ]
+    },
+
+    "browser_automation": {
+      "description": "Automate web tasks via browser",
+      "triggers": [
+        "browser",
+        "login to",
+        "navigate to",
+        "click on",
+        "fill form",
+        "scrape website"
+      ],
+      "workflows": [],
+      "memory": [],
+      "tools": [
+        "browser_open",
+        "browser_login",
+        "browser_click",
+        "browser_type",
+        "browser_read",
+        "browser_screenshot",
+        "browser_wait",
+        "browser_close",
+        "browser_list"
+      ]
+    },
+
+    "crypto_management": {
+      "description": "Check balances or send crypto",
+      "triggers": [
+        "crypto",
+        "coinbase",
+        "usdt",
+        "balance",
+        "send crypto",
+        "refill",
+        "deposit address"
+      ],
+      "workflows": ["crypto_refill"],
+      "memory": [],
+      "tools": [
+        "coinbase_get_balance",
+        "coinbase_send_crypto",
+        "save_deposit_address",
+        "get_deposit_address"
+      ]
+    },
+
+    "google_drive_operations": {
+      "description": "Work with Google Drive files",
+      "triggers": [
+        "drive",
+        "google docs",
+        "search drive",
+        "create doc",
+        "upload file",
+        "format doc"
+      ],
+      "workflows": ["google_drive", "google_docs_formatting"],
+      "memory": [],
+      "tools": [
+        "drive_search",
+        "drive_read_text",
+        "drive_list_recent",
+        "drive_list_folders",
+        "drive_upload",
+        "drive_create_doc",
+        "drive_move_rename",
+        "drive_share_link",
+        "drive_export_pdf",
+        "drive_delete",
+        "drive_move_to_folder_by_name",
+        "docs_format"
+      ]
+    },
+
+    "prospect_research": {
+      "description": "Research prospects for outreach",
+      "triggers": [
+        "research",
+        "find prospects",
+        "google maps",
+        "find businesses",
+        "scrape maps",
+        "find email"
+      ],
+      "workflows": ["outbound_email"],
+      "memory": ["business.targetCustomers"],
+      "tools": [
+        "scrape_google_maps",
+        "research_website",
+        "find_email"
+      ]
+    },
+
+    "reply_processing": {
+      "description": "Process campaign replies and update stages",
+      "triggers": [
+        "check replies",
+        "process replies",
+        "any responses",
+        "update campaign stages"
+      ],
+      "workflows": ["campaigns"],
+      "memory": [],
+      "tools": [
+        "process_campaign_replies",
+        "gmail_search",
+        "gmail_read",
+        "campaign_write"
+      ]
+    },
+
+    "daily_routines": {
+      "description": "Scheduled daily tasks",
+      "triggers": [
+        "daily email check",
+        "routine check",
+        "scheduled task"
+      ],
+      "workflows": ["daily_email_check"],
+      "memory": ["identity.email"],
+      "tools": [
+        "gmail_search",
+        "gmail_read"
+      ]
+    }
+  },
+
+  "workflow_dependencies": {
+    "outbound_email": {
+      "requires": ["identity/profile.md", "identity/voice.md"],
+      "related": ["campaigns"]
+    },
+    "campaigns": {
+      "requires": ["identity/profile.md"],
+      "related": ["outbound_email", "gmail"]
+    },
+    "gmail": {
+      "requires": ["identity.email"],
+      "related": ["send_email"]
+    },
+    "google_drive": {
+      "requires": [],
+      "related": ["google_docs_formatting"]
+    },
+    "google_docs_formatting": {
+      "requires": [],
+      "related": ["google_drive"]
+    },
+    "crypto_refill": {
+      "requires": [],
+      "related": []
+    },
+    "daily_email_check": {
+      "requires": ["identity.email"],
+      "related": ["gmail"]
+    }
+  }
+}

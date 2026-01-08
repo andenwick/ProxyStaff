@@ -1,0 +1,88 @@
+{
+  "category": "crypto",
+  "description": "Cryptocurrency management tools (Coinbase)",
+  "tools": [
+    {
+      "name": "coinbase_get_balance",
+      "description": "Check your Coinbase wallet balance. Use this before sending crypto to verify you have sufficient funds.",
+      "script": "coinbase_get_balance.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "Specific currency to check (e.g., USDT, BTC). If omitted, returns all balances."
+          }
+        }
+      }
+    },
+    {
+      "name": "coinbase_send_crypto",
+      "description": "Send crypto from Coinbase to an external wallet address. ALWAYS verify the address before sending. Use this for refilling Rainbet or other platforms.",
+      "script": "coinbase_send_crypto.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to_address": {
+            "type": "string",
+            "description": "Destination wallet address"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount to send"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency to send (default: USDT)"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network to use: TRC20, ERC20, or BEP20 (default: TRC20)"
+          }
+        },
+        "required": ["to_address", "amount"]
+      }
+    },
+    {
+      "name": "save_deposit_address",
+      "description": "Save a crypto deposit address for a platform (e.g., Rainbet) for future use.",
+      "script": "save_deposit_address.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Platform name (e.g., rainbet)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Deposit address"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network: TRC20, ERC20, or BEP20 (default: TRC20)"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency (default: USDT)"
+          }
+        },
+        "required": ["platform", "address"]
+      }
+    },
+    {
+      "name": "get_deposit_address",
+      "description": "Get a saved crypto deposit address for a platform. Use this to check if an address is already saved before asking the user.",
+      "script": "get_deposit_address.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Platform name (e.g., rainbet). If omitted, returns all saved addresses."
+          }
+        }
+      }
+    }
+  ]
+}

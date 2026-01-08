@@ -1,17 +1,39 @@
 ---json
 {
   "version": 1,
-  "lastUpdated": "2026-01-06T00:00:00.000Z",
-  "name": "ProxyStaff",
-  "company": "Aspen Automations LLC",
+  "lastUpdated": "2026-01-07T22:47:06.848516Z",
+  "name": "Anden",
+  "company": "ProxyStaff",
   "timezone": "America/Denver",
   "role": "AI Infrastructure Provider",
   "industry": "AI/Automation SaaS",
   "owner": "Anden",
   "location": "Salt Lake City, Utah",
   "serviceArea": "Remote/Global",
-  "website": "aspenautomations.com",
-  "email": "anden@aspenautomations.com"
+  "website": "proxystaff.com",
+  "email": "andenwick@gmail.com",
+  "business": {
+    "name": "ProxyStaff",
+    "description": "AI automation for busy business owners",
+    "targetCustomers": [
+      "real estate agents",
+      "insurance agents",
+      "professional services",
+      "trades"
+    ]
+  },
+  "interests": {
+    "sports": [
+      "NFL - Seattle Seahawks"
+    ]
+  },
+  "contact": [
+    {
+      "email": "andenwick@gmail.com",
+      "learnedAt": "2026-01-07T22:07:20.013136Z",
+      "id": "101c4e72"
+    }
+  ]
 }
 ---
 # Profile
@@ -46,3 +68,6 @@ Business owners who:
 ## Value Proposition
 
 "Your AI assistant that actually works. No chatbots. No generic responses. A trained team member that knows your business."
+
+## 2026-01-07 22:47
+Test entry to verify remember.py workflow is functioning correctly

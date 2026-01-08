@@ -123,7 +123,7 @@ If you'd like to chat, just reply. Otherwise, I'll assume it's a "not now" and c
 ### 4. CAN-SPAM Compliance
 
 Every email MUST include:
-- Clear "From" identity (Anden / Aspen Automations)
+- Clear "From" identity (Anden / ProxyStaff)
 - Physical address: [Your address]
 - Unsubscribe mechanism: "Reply 'unsubscribe' to be removed"
 

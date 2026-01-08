@@ -1,0 +1,370 @@
+{
+  "category": "google_drive",
+  "description": "Google Drive and Google Docs tools",
+  "tools": [
+    {
+      "name": "drive_search",
+      "description": "Search Google Drive files by query or text and return matching file metadata.",
+      "script": "drive_search.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Drive query string (e.g., \"name contains 'listing' and mimeType = 'application/vnd.google-apps.document'\")"
+          },
+          "text": {
+            "type": "string",
+            "description": "Plain text to search in file name or content"
+          },
+          "folder_id": {
+            "type": "string",
+            "description": "Optional folder ID to scope the search"
+          },
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 10, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_search call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed files (default: false)"
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Sort order (default: modifiedTime desc)"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_read_text",
+      "description": "Read text content from a Google Drive file (Google Docs export or text files).",
+      "script": "drive_read_text.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to read"
+          },
+          "max_bytes": {
+            "type": "number",
+            "description": "Max bytes of text to return (default: 50000)"
+          },
+          "export_mime": {
+            "type": "string",
+            "description": "Override export MIME type for Google Docs (e.g., text/plain, text/csv)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_list_recent",
+      "description": "List recently modified Google Drive files.",
+      "script": "drive_list_recent.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 10, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_list_recent call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed files (default: false)"
+          },
+          "folder_id": {
+            "type": "string",
+            "description": "Optional folder ID to scope the list"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_list_folders",
+      "description": "List Google Drive folders (optionally within a parent).",
+      "script": "drive_list_folders.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "description": "Parent folder ID to list children from"
+          },
+          "page_size": {
+            "type": "number",
+            "description": "Max results to return (default: 25, max: 1000)"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Page token from a previous drive_list_folders call"
+          },
+          "include_trashed": {
+            "type": "boolean",
+            "description": "Include trashed folders (default: false)"
+          },
+          "order_by": {
+            "type": "string",
+            "description": "Sort order (default: name)"
+          }
+        }
+      }
+    },
+    {
+      "name": "drive_upload",
+      "description": "Upload a local file to Google Drive.",
+      "script": "drive_upload.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Local file path to upload"
+          },
+          "name": {
+            "type": "string",
+            "description": "Override file name in Drive"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID"
+          },
+          "mime_type": {
+            "type": "string",
+            "description": "Content type for the uploaded file"
+          },
+          "drive_mime_type": {
+            "type": "string",
+            "description": "Drive metadata mimeType (optional)"
+          }
+        },
+        "required": ["file_path"]
+      }
+    },
+    {
+      "name": "drive_create_doc",
+      "description": "Create a Google Doc (optionally with text content).",
+      "script": "drive_create_doc.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Document title"
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional text content to import into the doc"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID"
+          }
+        },
+        "required": ["title"]
+      }
+    },
+    {
+      "name": "drive_move_rename",
+      "description": "Move and/or rename a Drive file.",
+      "script": "drive_move_rename.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to update"
+          },
+          "new_name": {
+            "type": "string",
+            "description": "New name for the file"
+          },
+          "new_parent_id": {
+            "type": "string",
+            "description": "Move file into this folder ID"
+          },
+          "keep_existing_parents": {
+            "type": "boolean",
+            "description": "Keep existing parents when moving (default: false)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_share_link",
+      "description": "Create a shareable link for a file by setting link permissions.",
+      "script": "drive_share_link.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to share"
+          },
+          "role": {
+            "type": "string",
+            "description": "Permission role: reader, commenter, or writer (default: reader)"
+          },
+          "allow_discovery": {
+            "type": "boolean",
+            "description": "Allow file discovery without link (default: false)"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_export_pdf",
+      "description": "Export a file to PDF and save it back to Drive.",
+      "script": "drive_export_pdf.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to export"
+          },
+          "output_name": {
+            "type": "string",
+            "description": "Name for the exported PDF file"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Destination folder ID for the PDF"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_delete",
+      "description": "Delete a file from Drive.",
+      "script": "drive_delete.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to delete"
+          }
+        },
+        "required": ["file_id"]
+      }
+    },
+    {
+      "name": "drive_move_to_folder_by_name",
+      "description": "Move a file into a folder resolved by name.",
+      "script": "drive_move_to_folder_by_name.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "description": "Drive file ID to move"
+          },
+          "folder_name": {
+            "type": "string",
+            "description": "Folder name to move into"
+          },
+          "parent_id": {
+            "type": "string",
+            "description": "Optional parent folder ID to scope the search"
+          },
+          "create_if_missing": {
+            "type": "boolean",
+            "description": "Create folder if not found (default: false)"
+          },
+          "keep_existing_parents": {
+            "type": "boolean",
+            "description": "Keep existing parents when moving (default: false)"
+          }
+        },
+        "required": ["file_id", "folder_name"]
+      }
+    },
+    {
+      "name": "docs_format",
+      "description": "Apply formatting, headings, alignment, bullets, insert, and replace operations in a Google Doc.",
+      "script": "docs_format.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "doc_id": {
+            "type": "string",
+            "description": "Google Doc ID to update"
+          },
+          "operations": {
+            "type": "array",
+            "description": "List of formatting operations to apply",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "Operation type: replace_text, insert_text, style_text, paragraph_style, bullets"
+                },
+                "find": { "type": "string" },
+                "replace": { "type": "string" },
+                "match_case": { "type": "boolean" },
+                "text": { "type": "string" },
+                "index": { "type": "number" },
+                "at_end": { "type": "boolean" },
+                "position": { "type": "string", "description": "before or after (for insert_text with match)" },
+                "match": { "type": "string" },
+                "match_all": { "type": "boolean" },
+                "target": { "type": "string", "description": "document (to apply across entire doc)" },
+                "range": {
+                  "type": "object",
+                  "properties": {
+                    "start_index": { "type": "number" },
+                    "end_index": { "type": "number" }
+                  }
+                },
+                "bold": { "type": "boolean" },
+                "italic": { "type": "boolean" },
+                "underline": { "type": "boolean" },
+                "font_family": { "type": "string" },
+                "font_size_pt": { "type": "number" },
+                "color_rgb": {
+                  "type": "array",
+                  "items": { "type": "number" },
+                  "description": "RGB array [r,g,b]"
+                },
+                "background_color_rgb": {
+                  "type": "array",
+                  "items": { "type": "number" },
+                  "description": "RGB array [r,g,b]"
+                },
+                "named_style_type": {
+                  "type": "string",
+                  "description": "HEADING_1, HEADING_2, NORMAL_TEXT, etc."
+                },
+                "alignment": {
+                  "type": "string",
+                  "description": "START, CENTER, END, JUSTIFIED"
+                },
+                "line_spacing": { "type": "number" },
+                "preset": {
+                  "type": "string",
+                  "description": "Bullet preset (e.g., BULLET_DISC_CIRCLE_SQUARE, NUMBERED_DECIMAL_NESTED)"
+                }
+              },
+              "required": ["type"]
+            }
+          }
+        },
+        "required": ["doc_id", "operations"]
+      }
+    }
+  ]
+}

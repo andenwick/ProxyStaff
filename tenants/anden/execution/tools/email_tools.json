@@ -1,0 +1,86 @@
+{
+  "category": "email",
+  "description": "Email sending and management tools",
+  "tools": [
+    {
+      "name": "send_email",
+      "description": "Send an email via SendGrid. Use this when the user wants to send an email notification to someone.",
+      "script": "send_email.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient email address"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content (plain text)"
+          }
+        },
+        "required": ["to", "subject", "body"]
+      }
+    },
+    {
+      "name": "gmail_search",
+      "description": "Search Gmail inbox using Gmail search syntax. Returns list of matching emails with ID, subject, from, and date.",
+      "script": "gmail_search.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Gmail search query (e.g., 'from:john@example.com', 'subject:invoice', 'is:unread', 'newer_than:7d')"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Maximum number of emails to return (default: 10)"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "gmail_read",
+      "description": "Read the full content of a specific email by its ID (obtained from gmail_search).",
+      "script": "gmail_read.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "email_id": {
+            "type": "string",
+            "description": "The email ID from gmail_search results"
+          }
+        },
+        "required": ["email_id"]
+      }
+    },
+    {
+      "name": "gmail_send",
+      "description": "Send an email via Gmail SMTP.",
+      "script": "gmail_send.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "Recipient email address"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line"
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body content (plain text)"
+          }
+        },
+        "required": ["to", "subject", "body"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "category": "utility",
+  "description": "General utility and testing tools",
+  "tools": [
+    {
+      "name": "debug_env",
+      "description": "Debug tool to check environment variables. Shows TENANT_FOLDER, .env file status, and which credentials are configured.",
+      "script": "debug_env.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "random_number",
+      "description": "Generate a truly random number between min and max (inclusive). Use this when asked for random numbers.",
+      "script": "random_number.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "min": {
+            "type": "number",
+            "description": "Minimum value (default: 1)"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value (default: 10)"
+          }
+        }
+      }
+    },
+    {
+      "name": "echo_test",
+      "description": "Echo back a message with a timestamp. Use this to test if tools are working.",
+      "script": "echo_test.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The message to echo back"
+          }
+        },
+        "required": ["message"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "category": "prospecting",
+  "description": "Tools for finding and researching prospects",
+  "tools": [
+    {
+      "name": "scrape_google_maps",
+      "description": "Search Google Maps for businesses matching a query. Use for ICP prospecting to find potential customers (real estate agents, insurance agents, etc.).",
+      "script": "scrape_google_maps.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query (e.g., 'real estate agent', 'insurance agency')"
+          },
+          "location": {
+            "type": "string",
+            "description": "City or area to search (e.g., 'Salt Lake City, UT')"
+          },
+          "radius_miles": {
+            "type": "number",
+            "description": "Search radius in miles (default: 25)"
+          },
+          "max_results": {
+            "type": "number",
+            "description": "Maximum businesses to return (default: 20)"
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "research_website",
+      "description": "Research a business website to extract key information for personalized outreach. Scrapes homepage, about, and contact pages.",
+      "script": "research_website.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Website URL to research (e.g., 'example.com' or 'https://example.com')"
+          }
+        },
+        "required": ["url"]
+      }
+    },
+    {
+      "name": "find_email",
+      "description": "Find the most likely email address for a person using pattern matching. Generates common email patterns based on name and domain.",
+      "script": "find_email.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Person's full name (e.g., 'John Smith')"
+          },
+          "company": {
+            "type": "string",
+            "description": "Company name (used to guess domain if not provided)"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Email domain (e.g., 'acme.com')"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "Attempt SMTP verification (default: false)"
+          }
+        },
+        "required": ["name"]
+      }
+    }
+  ]
+}

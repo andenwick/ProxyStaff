@@ -1,0 +1,83 @@
+{
+  "category": "calendar",
+  "description": "Google Calendar tools for scheduling and availability",
+  "tools": [
+    {
+      "name": "calendar_get_availability",
+      "description": "Get available time slots from Google Calendar for booking discovery calls. Returns open slots within business hours.",
+      "script": "calendar_get_availability.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "description": "Start date (YYYY-MM-DD, default: today)"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "End date (YYYY-MM-DD, default: 7 days from now)"
+          },
+          "slot_duration_minutes": {
+            "type": "number",
+            "description": "Duration of each slot (default: 30)"
+          },
+          "day_start_hour": {
+            "type": "number",
+            "description": "Business day start hour in 24h (default: 9)"
+          },
+          "day_end_hour": {
+            "type": "number",
+            "description": "Business day end hour in 24h (default: 17)"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone (default: America/Denver)"
+          }
+        }
+      }
+    },
+    {
+      "name": "calendar_create_event",
+      "description": "Create a Google Calendar event and optionally send an invite. Used for booking discovery calls with prospects.",
+      "script": "calendar_create_event.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Event title (e.g., 'Discovery Call - John Smith')"
+          },
+          "start_datetime": {
+            "type": "string",
+            "description": "Start time (YYYY-MM-DD HH:MM or ISO format)"
+          },
+          "duration_minutes": {
+            "type": "number",
+            "description": "Duration in minutes (default: 30)"
+          },
+          "attendee_email": {
+            "type": "string",
+            "description": "Email to send invite to"
+          },
+          "attendee_name": {
+            "type": "string",
+            "description": "Display name for attendee"
+          },
+          "description": {
+            "type": "string",
+            "description": "Event description"
+          },
+          "location": {
+            "type": "string",
+            "description": "Event location or video call link"
+          },
+          "send_invite": {
+            "type": "boolean",
+            "description": "Send calendar invite (default: true)"
+          }
+        },
+        "required": ["title", "start_datetime"]
+      }
+    }
+  ]
+}

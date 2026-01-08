@@ -1,0 +1,182 @@
+{
+  "$schema": "context_map_v2_semantic",
+  "description": "Maps tasks to required context using semantic understanding. Each pattern has a rich description that an LLM uses to determine if it matches a given task.",
+
+  "task_patterns": {
+    "outbound_campaign": {
+      "description": "Managing outbound sales campaigns where you generate personalized emails for prospects, queue them for approval, send them out, and track responses. This includes researching prospects, finding their contact info, writing emails, and managing the campaign lifecycle from identification through to booking meetings. The user wants to process a list of prospects, send them outreach emails, handle responses, and move them through sales stages.",
+      "workflows": ["outbound_email", "campaigns"],
+      "memory": ["identity", "business"],
+      "tools": [
+        "research_website",
+        "find_email",
+        "gmail_send",
+        "scrape_google_maps"
+      ],
+      "scripts": [
+        "campaign_read",
+        "campaign_write",
+        "list_pending_actions",
+        "approve_actions"
+      ],
+      "related_files": [
+        "operations/campaigns/proxystaff-outbound/",
+        "identity/profile.md",
+        "identity/voice.md",
+        "knowledge/services.md"
+      ]
+    },
+
+    "email_operations": {
+      "description": "Basic email tasks like sending a single email to someone, checking your inbox, searching for specific emails, or reading email content. This is for standalone email operations, not campaign management. The user wants to interact with Gmail directly for simple email tasks.",
+      "workflows": ["gmail", "send_email"],
+      "memory": ["identity.email"],
+      "tools": [
+        "gmail_send",
+        "gmail_search",
+        "gmail_read",
+        "send_email"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "calendar_booking": {
+      "description": "Scheduling meetings, checking calendar availability, booking calls, or creating calendar events. The user wants to see when they're free, schedule a meeting with someone, book a discovery call, or check their calendar for open time slots.",
+      "workflows": [],
+      "memory": ["identity.timezone", "identity.email"],
+      "tools": [
+        "calendar_get_availability",
+        "calendar_create_event"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "browser_automation": {
+      "description": "Automating web browser tasks like navigating to websites, logging into accounts, clicking buttons, filling forms, reading page content, or scraping websites. The user wants to interact with a web page programmatically rather than manually.",
+      "workflows": [],
+      "memory": [],
+      "tools": [
+        "browser_open",
+        "browser_login",
+        "browser_click",
+        "browser_type",
+        "browser_read",
+        "browser_screenshot",
+        "browser_wait",
+        "browser_close",
+        "browser_list"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "crypto_management": {
+      "description": "Managing cryptocurrency operations like checking wallet balances on Coinbase, sending USDT or other crypto to external addresses, refilling gambling or trading platforms, saving deposit addresses, or managing crypto transfers. The user wants to move crypto between wallets or check their crypto holdings.",
+      "workflows": ["crypto_refill"],
+      "memory": [],
+      "tools": [
+        "coinbase_get_balance",
+        "coinbase_send_crypto",
+        "save_deposit_address",
+        "get_deposit_address"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "google_drive_operations": {
+      "description": "Working with Google Drive and Google Docs including searching for files, reading document content, creating new documents or spreadsheets, uploading files, moving files between folders, sharing files, applying formatting to docs, or exporting to PDF. The user wants to manage their Google Drive files or work with Google Docs.",
+      "workflows": ["google_drive", "google_docs_formatting"],
+      "memory": [],
+      "tools": [
+        "drive_search",
+        "drive_read_text",
+        "drive_list_recent",
+        "drive_list_folders",
+        "drive_upload",
+        "drive_create_doc",
+        "drive_move_rename",
+        "drive_share_link",
+        "drive_export_pdf",
+        "drive_delete",
+        "drive_move_to_folder_by_name",
+        "docs_format"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "prospect_research": {
+      "description": "Finding and researching potential customers or prospects including searching Google Maps for businesses in a specific area, researching company websites to gather information for personalized outreach, finding email addresses for decision makers, or building lists of prospects in a target industry or location. The user wants to identify and gather information about potential customers.",
+      "workflows": ["outbound_email"],
+      "memory": ["business.targetCustomers"],
+      "tools": [
+        "scrape_google_maps",
+        "research_website",
+        "find_email"
+      ],
+      "scripts": [],
+      "related_files": []
+    },
+
+    "reply_processing": {
+      "description": "Processing and managing responses from prospects or campaign targets including checking Gmail for replies to outreach emails, analyzing reply intent (interested, not interested, questions, etc.), updating prospect stages based on responses, and determining next actions. The user wants to handle incoming responses from a sales campaign.",
+      "workflows": ["campaigns"],
+      "memory": [],
+      "tools": [
+        "gmail_search",
+        "gmail_read"
+      ],
+      "scripts": [
+        "process_campaign_replies",
+        "campaign_write"
+      ],
+      "related_files": []
+    },
+
+    "daily_routines": {
+      "description": "Scheduled daily tasks and routine checks like the daily email review, checking for important messages, processing inbox, or other recurring tasks that run automatically on a schedule. The user wants to set up or run automated daily workflows.",
+      "workflows": ["daily_email_check"],
+      "memory": ["identity.email"],
+      "tools": [
+        "gmail_search",
+        "gmail_read"
+      ],
+      "scripts": [],
+      "related_files": []
+    }
+  },
+
+  "workflow_dependencies": {
+    "outbound_email": {
+      "requires": ["identity/profile.md", "identity/voice.md"],
+      "related": ["campaigns"]
+    },
+    "campaigns": {
+      "requires": ["identity/profile.md"],
+      "related": ["outbound_email", "gmail"]
+    },
+    "gmail": {
+      "requires": ["identity.email"],
+      "related": ["send_email"]
+    },
+    "google_drive": {
+      "requires": [],
+      "related": ["google_docs_formatting"]
+    },
+    "google_docs_formatting": {
+      "requires": [],
+      "related": ["google_drive"]
+    },
+    "crypto_refill": {
+      "requires": [],
+      "related": []
+    },
+    "daily_email_check": {
+      "requires": ["identity.email"],
+      "related": ["gmail"]
+    }
+  }
+}
