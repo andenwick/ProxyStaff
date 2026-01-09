@@ -9,7 +9,8 @@
       "input_schema": {
         "type": "object",
         "properties": {}
-      }
+      },
+      "test_input": {}
     },
     {
       "name": "random_number",
@@ -27,7 +28,8 @@
             "description": "Maximum value (default: 10)"
           }
         }
-      }
+      },
+      "test_input": {"min": 1, "max": 10}
     },
     {
       "name": "echo_test",
@@ -42,7 +44,8 @@
           }
         },
         "required": ["message"]
-      }
+      },
+      "test_input": {"message": "health check"}
     }
   ]
 }

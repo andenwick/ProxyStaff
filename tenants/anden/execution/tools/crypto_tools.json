@@ -14,7 +14,8 @@
             "description": "Specific currency to check (e.g., USDT, BTC). If omitted, returns all balances."
           }
         }
-      }
+      },
+      "test_input": {}
     },
     {
       "name": "coinbase_send_crypto",
@@ -41,7 +42,8 @@
           }
         },
         "required": ["to_address", "amount"]
-      }
+      },
+      "skip_test": true
     },
     {
       "name": "save_deposit_address",
@@ -68,7 +70,8 @@
           }
         },
         "required": ["platform", "address"]
-      }
+      },
+      "skip_test": true
     },
     {
       "name": "get_deposit_address",
@@ -82,7 +85,8 @@
             "description": "Platform name (e.g., rainbet). If omitted, returns all saved addresses."
           }
         }
-      }
+      },
+      "test_input": {}
     }
   ]
 }

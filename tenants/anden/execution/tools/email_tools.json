@@ -23,7 +23,8 @@
           }
         },
         "required": ["to", "subject", "body"]
-      }
+      },
+      "skip_test": true
     },
     {
       "name": "gmail_search",
@@ -42,7 +43,8 @@
           }
         },
         "required": ["query"]
-      }
+      },
+      "test_input": {"query": "newer_than:1d", "max_results": 1}
     },
     {
       "name": "gmail_read",
@@ -57,6 +59,11 @@
           }
         },
         "required": ["email_id"]
+      },
+      "test_chain": {
+        "depends_on": "gmail_search",
+        "map_output": "emails[0].id",
+        "to_input": "email_id"
       }
     },
     {
@@ -80,7 +87,8 @@
           }
         },
         "required": ["to", "subject", "body"]
-      }
+      },
+      "skip_test": true
     }
   ]
 }

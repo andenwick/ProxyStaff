@@ -23,7 +23,8 @@
           }
         },
         "required": ["url"]
-      }
+      },
+      "test_input": {"url": "https://example.com"}
     },
     {
       "name": "browser_login",
@@ -54,7 +55,8 @@
           }
         },
         "required": ["session_id", "service"]
-      }
+      },
+      "skip_test": true
     },
     {
       "name": "browser_click",
@@ -73,6 +75,11 @@
           }
         },
         "required": ["session_id", "selector"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -100,6 +107,11 @@
           }
         },
         "required": ["session_id", "selector", "text"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -123,6 +135,11 @@
           }
         },
         "required": ["session_id"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -142,6 +159,11 @@
           }
         },
         "required": ["session_id"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -169,6 +191,11 @@
           }
         },
         "required": ["session_id"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -184,6 +211,11 @@
           }
         },
         "required": ["session_id"]
+      },
+      "test_chain": {
+        "depends_on": "browser_open",
+        "map_output": "session_id",
+        "to_input": "session_id"
       }
     },
     {
@@ -193,7 +225,8 @@
       "input_schema": {
         "type": "object",
         "properties": {}
-      }
+      },
+      "test_input": {}
     }
   ]
 }
