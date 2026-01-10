@@ -126,23 +126,23 @@ These tools store data in the database, surviving across sessions and deployment
 
 **Examples:**
 ```
-# Read user identity
-memory_read(type: "identity")
+# Read user identity - USE THE MCP TOOL, not a Python script!
+mcp__tools__memory_read(type: "identity")
 
 # Read specific field
-memory_read(type: "identity", path: "preferences.timezone")
+mcp__tools__memory_read(type: "identity", path: "preferences.timezone")
 
 # Set a value
-memory_write(type: "identity", operation: "set", path: "name", value: "Anden")
+mcp__tools__memory_write(type: "identity", operation: "set", path: "name", value: "Anden")
 
 # Merge data
-memory_write(type: "patterns", operation: "merge", value: {"communication": {"style": "concise"}})
+mcp__tools__memory_write(type: "patterns", operation: "merge", value: {"communication": {"style": "concise"}})
 
 # Append to array
-memory_write(type: "patterns", operation: "append", path: "work", value: {"pattern": "prefers morning meetings", "confidence": "high"})
+mcp__tools__memory_write(type: "patterns", operation: "append", path: "work", value: {"pattern": "prefers morning meetings", "confidence": "high"})
 
 # Remove from array (by id)
-memory_write(type: "relationships", operation: "remove", path: "people", value: {"id": "abc123"})
+mcp__tools__memory_write(type: "relationships", operation: "remove", path: "people", value: {"id": "abc123"})
 ```
 
 **IMPORTANT**: Use memory tools to learn about users over time. Store preferences, patterns, and relationships so you can personalize interactions.
