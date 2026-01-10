@@ -22,6 +22,27 @@ except ImportError:
     sys.exit(1)
 
 
+def load_env_from_cwd():
+    """Load .env file from current working directory into os.environ."""
+    env_path = os.path.join(os.getcwd(), '.env')
+    if os.path.exists(env_path):
+        with open(env_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    # Remove quotes if present
+                    value = value.strip()
+                    if (value.startswith('"') and value.endswith('"')) or \
+                       (value.startswith("'") and value.endswith("'")):
+                        value = value[1:-1]
+                    os.environ[key] = value
+
+
+# Load .env from cwd (tenant folder)
+load_env_from_cwd()
+
+
 def main():
     try:
         # Read JSON input from stdin
