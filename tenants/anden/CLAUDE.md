@@ -110,7 +110,9 @@ When someone asks "what browser tools do you have?", list YOUR `mcp__tools__brow
 
 ### Memory Tools (Persistent Storage)
 
-These tools store data in the database, surviving across sessions and deployments. Use them to remember things about the user.
+**CRITICAL**: These are MCP tools, NOT Python scripts. Call them as `mcp__tools__memory_read` and `mcp__tools__memory_write`. Do NOT try to run `python memory_write.py` - that file doesn't exist.
+
+Memory tools store data in the database, surviving across sessions and deployments. Use them to remember things about the user.
 
 | MCP Tool | Description |
 |----------|-------------|
@@ -118,34 +120,73 @@ These tools store data in the database, surviving across sessions and deployment
 | `mcp__tools__memory_write` | Write to persistent memory. Operations: set, merge, append, remove |
 
 **Memory Types** (examples - you can create custom types):
-- `identity` - User's name, timezone, preferences
-- `patterns` - Observed communication, work, temporal patterns
+- `identity` - User's name, timezone, preferences, contact info
+- `patterns` - Observed communication style, work habits, temporal patterns
 - `boundaries` - What never to do, always do, when to escalate
 - `relationships` - People mentioned in conversations
-- `questions` - Questions to ask user to learn more
+- `notes` - Ad-hoc notes the user asks you to remember
 
-**Examples:**
+#### When to Use Memory Tools
+
+**READ memory at conversation start:**
+- First message of a new conversation → read identity and patterns
+- This gives you context about who you're talking to
+
+**WRITE memory when you learn something new:**
+- User tells you their name, timezone, preferences → save to `identity`
+- User says "remember that..." or "note that..." → save to `notes`
+- You notice a pattern (e.g., they always ask about X) → save to `patterns`
+- User mentions a person (colleague, family) → save to `relationships`
+- User says "never do X" or "always do Y" → save to `boundaries`
+
+**DON'T write memory for:**
+- Temporary task context (use conversation instead)
+- Things already in files (prospects, campaigns, etc.)
+- Trivial one-off information
+
+#### How to Use Memory Tools
+
+**Reading:**
 ```
-# Read user identity - USE THE MCP TOOL, not a Python script!
+# Read all identity info
 mcp__tools__memory_read(type: "identity")
 
 # Read specific field
 mcp__tools__memory_read(type: "identity", path: "preferences.timezone")
 
-# Set a value
-mcp__tools__memory_write(type: "identity", operation: "set", path: "name", value: "Anden")
-
-# Merge data
-mcp__tools__memory_write(type: "patterns", operation: "merge", value: {"communication": {"style": "concise"}})
-
-# Append to array
-mcp__tools__memory_write(type: "patterns", operation: "append", path: "work", value: {"pattern": "prefers morning meetings", "confidence": "high"})
-
-# Remove from array (by id)
-mcp__tools__memory_write(type: "relationships", operation: "remove", path: "people", value: {"id": "abc123"})
+# Read notes
+mcp__tools__memory_read(type: "notes")
 ```
 
-**IMPORTANT**: Use memory tools to learn about users over time. Store preferences, patterns, and relationships so you can personalize interactions.
+**Writing:**
+```
+# Set a value (replaces if exists)
+mcp__tools__memory_write(type: "identity", operation: "set", path: "name", value: "Anden")
+
+# Merge data (deep merge with existing)
+mcp__tools__memory_write(type: "identity", operation: "merge", value: {"preferences": {"timezone": "America/Denver"}})
+
+# Append to array
+mcp__tools__memory_write(type: "notes", operation: "append", value: {"note": "Use gmail_send_api for emails, not SMTP", "date": "2026-01-09"})
+
+# Remove from array (by matching fields)
+mcp__tools__memory_write(type: "notes", operation: "remove", value: {"note": "outdated info"})
+```
+
+#### Example: User Asks You to Remember Something
+
+User: "remember to use gmail api for sending emails"
+
+Your action:
+```
+mcp__tools__memory_write(
+  type: "notes",
+  operation: "append",
+  value: {"note": "Use gmail_send_api.py for emails - SMTP is blocked on Railway", "added": "2026-01-09"}
+)
+```
+
+Response: "Got it, I'll remember to use the Gmail API for sending emails."
 
 ## Built-in Tools (shared_tools/)
 
