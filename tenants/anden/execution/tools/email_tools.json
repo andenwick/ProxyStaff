@@ -68,8 +68,8 @@
     },
     {
       "name": "gmail_send",
-      "description": "Send an email via Gmail SMTP.",
-      "script": "gmail_send.py",
+      "description": "Send an email via Gmail API (works on Railway where SMTP is blocked).",
+      "script": "gmail_send_api.py",
       "input_schema": {
         "type": "object",
         "properties": {
